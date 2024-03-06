@@ -1,0 +1,17 @@
+on:
+  pull_request:
+    types: [closed, labeled]
+
+jobs:
+  grant_holobyte:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged }}
+    steps:
+      - run: echo 'Merged'
+
+  issue_outstanding_badge:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+    run: |
+      echo "$GITHUB_CONTEXT"
