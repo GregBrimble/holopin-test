@@ -12,6 +12,7 @@ jobs:
   issue_outstanding_badge:
     runs-on: ubuntu-latest
     env:
-      GITHUB_CONTEXT: ${{ toJson(github) }}
-    run: |
-      echo "$GITHUB_CONTEXT"
+      GITHUB_CONTEXT: ${{ toJson(github.event) }}
+    steps:
+      - run: |
+          echo "$GITHUB_CONTEXT"
