@@ -1,9 +1,19 @@
 on:
   pull_request:
     types: [closed, labeled]
+  workflow_dispatch:
+    inputs:
+      user:
+        description: "GitHub username"
+        required: true
+        type: string
+      outstanding:
+        description: "Was the contribution outstanding?"
+        required: false
+        type: boolean
 
 jobs:
-  grant_holobyte:
+  issue_lava_lamp_holobyte:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged }}
     steps:
@@ -11,8 +21,9 @@ jobs:
 
   issue_outstanding_badge:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'outstanding') }}
     env:
-      GITHUB_CONTEXT: ${{ toJson(github.event) }}
+      GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.user) }}
     steps:
       - run: |
           echo "$GITHUB_CONTEXT"
