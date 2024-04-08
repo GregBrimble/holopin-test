@@ -18,6 +18,7 @@ jobs:
     if: ${{ github.event.pull_request.merged }}
     permissions:
       issues: write
+      pull-requests: write
     steps:
       - run: gh issue edit "$NUMBER" --add-label "$LABELS"
         env:
