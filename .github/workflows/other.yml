@@ -1,5 +1,5 @@
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
   workflow_dispatch:
     inputs:
@@ -12,12 +12,17 @@ on:
         required: false
         type: boolean
 
-permissions: write-all
+permissions:
+  issues: write
+  pull-requests: write
 
 jobs:
   issue_lava_lamp_holobyte:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged }}
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - run: gh pr edit "$NUMBER" --add-label "$LABELS"
         env:
@@ -25,12 +30,3 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.pull_request.number }}
           LABELS: contribution
-
-  issue_outstanding_badge:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'outstanding') }}
-    env:
-      GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.user) }}
-    steps:
-      - run: |
-          echo "$GITHUB_CONTEXT"
