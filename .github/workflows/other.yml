@@ -12,13 +12,12 @@ on:
         required: false
         type: boolean
 
+permissions: write-all
+
 jobs:
   issue_lava_lamp_holobyte:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged }}
-    permissions:
-      issues: write
-      pull-requests: write
     steps:
       - run: gh pr edit "$NUMBER" --add-label "$LABELS"
         env:
