@@ -1,0 +1,36 @@
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      user:
+        description: "GitHub username"
+        required: true
+        type: string
+      outstanding:
+        description: "Was the contribution outstanding?"
+        required: false
+        type: boolean
+
+jobs:
+  issue_lava_lamp_holobyte:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged }}
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          LABELS: greg
+
+  issue_outstanding_badge:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'outstanding') }}
+    env:
+      GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.user) }}
+    steps:
+      - run: |
+          echo "$GITHUB_CONTEXT"
