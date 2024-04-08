@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged }}
     permissions:
+      issues: write
       pull-requests: write
     steps:
       - run: gh pr edit "$NUMBER" --add-label "$LABELS"
