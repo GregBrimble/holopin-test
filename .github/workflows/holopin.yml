@@ -1,3 +1,4 @@
+name: Holopin
 on:
   pull_request_target:
     types:
@@ -6,6 +7,7 @@ on:
 
 jobs:
   issue_lava_lamp_holobyte:
+    name: Issue Lava Lamp Holobyte
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged }}
     steps:
@@ -16,6 +18,7 @@ jobs:
           NUMBER: ${{ github.event.pull_request.number }}
           LABELS: contribution
   issue_global_contribution_badge:
+    name: Issue Global Contribution badge
     runs-on: ubuntu-latest
     if: github.event.label.name == 'outstanding contribution'
     steps:
